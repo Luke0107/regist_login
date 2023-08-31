@@ -1,0 +1,76 @@
+import tkinter as tk
+from firebase import firebase
+from tkinter import messagebox
+url = 'https://python-d2cab-default-rtdb.firebaseio.com'
+fdb = firebase.FirebaseApplication(url, None)
+wnd = tk.Tk()
+wnd.geometry("400x400")
+wnd.title("main")
+def login_():
+    def sent():
+        username=ntext2.get()
+        data = fdb.get('/',username)
+        print(data)
+        if data:
+            print("login success")
+            messagebox.showinfo('訊息','登入成功')
+
+        else:
+            print("login fail")
+            messagebox.showinfo('訊息','無效的使用者名稱')
+    login_wnd = tk.Tk()
+    login_wnd.geometry("400x400")
+    login_wnd.title("login")
+    ntext1=tk.Label(login_wnd,text='請輸入姓名')
+    ntext1.place(relx=0.5,rely=0.3,anchor='n')
+    ntext2 = tk.Entry(login_wnd)
+    ntext2.place(relx=0.5,rely=0.4,anchor='n')
+    add = tk.Button(login_wnd,text="送出",underline=-1,command=sent)
+    add.place(relx=0.5,rely=0.5,anchor='n')
+    add3 = tk.Button(login_wnd,text="關閉",underline=-1,command=login_wnd.destroy)
+    add3.place(relx=0.7,rely=0.9,anchor="n")
+    login_wnd.mainloop()
+def register_():
+    def send():
+        name=name_text.get()
+        phone=phone_text.get()
+        ont=onthchoosen.get()
+        mail=mail_text.get()
+        fdb.put('/',name,{"phone":phone,"gender":ont,"mail":mail})
+        print(name,phone,ont,mail)
+    register_wnd = tk.Tk()
+    from tkinter import ttk
+    register_wnd.geometry("400x400")
+    register_wnd.title("register")
+    text1 = tk.Label(register_wnd,text='名字')
+    text1.place(relx=0.25,rely=0.2,anchor='n')
+    name_text = tk.Entry(register_wnd)
+    name_text.place(relx=0.5,rely=0.2,anchor="n")
+    text2 = tk.Label(register_wnd,text='電話')
+    text2.place(relx=0.25,rely=0.4,anchor='n')
+    phone_text = tk.Entry(register_wnd)
+    phone_text.place(relx=0.5,rely=0.4,anchor="n")
+    text3 = tk.Label(register_wnd,text='性別')
+    text3.place(relx=0.25,rely=0.6,anchor='n')
+    n = tk.StringVar()
+    onthchoosen = ttk.Combobox(register_wnd, width = 17, textvariable = n)
+    onthchoosen['values'] = ('男生', '女生')
+    onthchoosen.place(relx=0.5,rely=0.6,anchor="n")
+    text4 = tk.Label(register_wnd,text='郵件')
+    text4.place(relx=0.25,rely=0.8,anchor='n')
+    mail_text = tk.Entry(register_wnd)
+    mail_text.place(relx=0.5,rely=0.8,anchor="n")
+    add = tk.Button(register_wnd,text="送出",underline=-1,command=send)
+    add.place(relx=0.5,rely=0.9,anchor='n')
+    add3 = tk.Button(register_wnd,text="關閉",underline=-1,command=register_wnd.destroy)
+    add3.place(relx=0.7,rely=0.9,anchor="n")
+    
+
+    register_wnd.mainloop()
+add1 = tk.Button(wnd,text="登入",underline=-1,command=login_)
+add1.pack()
+add2 = tk.Button(wnd,text="註冊",underline=-1,command=register_)
+add2.pack()
+add3 = tk.Button(wnd,text="關閉",underline=-1,command=wnd.destroy)
+add3.pack()
+wnd.mainloop()
